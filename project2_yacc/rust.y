@@ -33,29 +33,57 @@ int insert(struct content a){
 	if (!inSymbolTable)
 	{
 		if(strcmp("int",a.type)==0){
+			if(strcmp("arrays",a.bigtype)==0){
+			strcpy(symbolTable[scope][id_total].id,a.id);
+			strcpy(symbolTable[scope][id_total].type,a.type);
+			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
+			id_total++;
+			}else{
 			strcpy(symbolTable[scope][id_total].id,a.id);
 			symbolTable[scope][id_total].ival = a.ival;
 			strcpy(symbolTable[scope][id_total].type,a.type);
 			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
 			id_total++;
+			}
 		}else if(strcmp("float",a.type)==0){
+			if(strcmp("arrays",a.bigtype)==0){
+			strcpy(symbolTable[scope][id_total].id,a.id);
+			strcpy(symbolTable[scope][id_total].type,a.type);
+			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
+			id_total++;
+			}else{
 			strcpy(symbolTable[scope][id_total].id,a.id);
 			symbolTable[scope][id_total].fval = a.fval;
 			strcpy(symbolTable[scope][id_total].type,a.type);
 			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
 			id_total++;
+			}
 		}else if(strcmp("str",a.type)==0){
+			if(strcmp("arrays",a.bigtype)==0){
+			strcpy(symbolTable[scope][id_total].id,a.id);
+			strcpy(symbolTable[scope][id_total].type,a.type);
+			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
+			id_total++;
+			}else{
 			strcpy(symbolTable[scope][id_total].id,a.id);
 			strcpy(symbolTable[scope][id_total].sval,a.sval);
 			strcpy(symbolTable[scope][id_total].type,a.type);
 			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
 			id_total++;
+			}
 		}else if(strcmp("bool",a.type)==0){
+			if(strcmp("arrays",a.bigtype)==0){
+			strcpy(symbolTable[scope][id_total].id,a.id);
+			strcpy(symbolTable[scope][id_total].type,a.type);
+			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
+			id_total++;
+			}else{
 			strcpy(symbolTable[scope][id_total].id,a.id);
 			strcpy(symbolTable[scope][id_total].type,a.type);
 			symbolTable[scope][id_total].bval = a.bval;
 			strcpy(symbolTable[scope][id_total].bigtype,a.bigtype);
 			id_total++;
+			}
 		}else{
 			strcpy(symbolTable[scope][id_total].id,a.id);
 			strcpy(symbolTable[scope][id_total].type,a.type);
@@ -90,21 +118,38 @@ int dump(){
 		{
 			if(strcmp("int",symbolTable[i][j].type)==0)
 			{
-			printf("%-*s\t%-*s\t%-*s\t%-*d\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,symbolTable[i][j].ival,10,i);
+				if(strcmp("arrays",symbolTable[i][j].bigtype)==0){
+					printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10," ",10,i);
+				}else{
+					printf("%-*s\t%-*s\t%-*s\t%-*d\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,symbolTable[i][j].ival,10,i);
+				}
 			}else if(strcmp("float",symbolTable[i][j].type)==0)
 			{
-			printf("%-*s\t%-*s\t%-*s\t%-*f\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,symbolTable[i][j].fval,10,i);
+				if(strcmp("arrays",symbolTable[i][j].bigtype)==0){
+					printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10," ",10,i);
+				}else{
+					printf("%-*s\t%-*s\t%-*s\t%-*f\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,symbolTable[i][j].fval,10,i);
+				}
 			}else if(strcmp("str",symbolTable[i][j].type)==0)
 			{
-			printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,symbolTable[i][j].sval,10,i);
+				if(strcmp("arrays",symbolTable[i][j].bigtype)==0){
+					printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10," ",10,i);
+				}else{
+					printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,symbolTable[i][j].sval,10,i);
+				}
 			}else if(strcmp("bool",symbolTable[i][j].type)==0)
 			{
+				if(strcmp("arrays",symbolTable[i][j].bigtype)==0){
+			printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10," ",10,i);
+
+				}else{
 				if(symbolTable[i][j].bval==0)
 				{
 				printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,"False",10,i);
 				}else if(symbolTable[i][j].bval==1)
 				{
 				printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10,symbolTable[i][j].type,10,symbolTable[i][j].bigtype,10,"True",10,i);
+				}
 				}
 			}else if(strcmp("null",symbolTable[i][j].type)==0)			{
 			printf("%-*s\t%-*s\t%-*s\t%-*s\t%-*d\n",10,symbolTable[i][j].id,10," ",10,symbolTable[i][j].bigtype,10," ",10,i);
@@ -377,6 +422,23 @@ declaration
 			strcpy(a.type,"int");
 			strcpy(a.bigtype,"var");
 			a.ival = 0 ;
+			insert(a);
+			printf("%s\n","Reducing to [declaration]");
+		}
+	| LET MUT IDENTIFIER LSB type_specifier COMMA INTEGERVAL RSB SEMICOLON
+		{
+			struct content a;
+			strcpy(a.id,$3);
+			strcpy(a.bigtype,"arrays");
+			if(strcmp("int",$5)==0){
+				strcpy(a.type,"int");
+			}else if(strcmp("float",$5)==0){
+				strcpy(a.type,"float");
+			}else if(strcmp("str",$5)==0){
+				strcpy(a.type,"str");
+			}else if(strcmp("bool",$5)==0){
+				strcpy(a.type,"bool");
+			}
 			insert(a);
 			printf("%s\n","Reducing to [declaration]");
 		}
