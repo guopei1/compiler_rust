@@ -149,7 +149,7 @@ int update(struct content a){
 			if(strcmp("var",symbolTable[i][j].bigtype)==0){
 			symbolTable[i][j].ival = a.ival;
 			symbolTable[i][j].storeVal = a.storeVal;
-			printf("~update~~~~~~~~~%d~~~~~~~~~~~~\n",symbolTable[i][j].ival);
+			printf("~update~~~value:%d~~~istore~%d~~~~~~\n",symbolTable[i][j].ival,symbolTable[i][j].storeVal);
 			}else{
 			}
 		}else if(strcmp("float",symbolTable[i][j].type)==0){
@@ -200,9 +200,9 @@ int getStoreVal(char *c){
 	{
 		for(int j=0;j<=id_total;j++)
 		{
-			printf("\t\tid:%s\n\t\tistore:%d\n",symbolTable[i][j].id,symbolTable[i][j].storeVal);
 			if(strcmp(c,symbolTable[i][j].id)==0)
 			{
+				printf("\t\tid:%s\n\t\tistore:%d\n",symbolTable[i][j].id,symbolTable[i][j].storeVal);
 				return symbolTable[i][j].storeVal;
 			}
 		}
@@ -591,14 +591,11 @@ declaration
 				printf("%s","ERROR!!!");
 				}
 			}else{
-				struct content a;
-				strcpy(a.id,$3);
-				strcpy(a.bigtype,"var");
-				a.ival = $7.uval.ival;
 				a.storeVal = storeNum;
 				update(a);
 				fprintf(javafile,"\t\tsipush %d\n",$7.uval.ival);
 				fprintf(javafile,"\t\tistore %d\n",storeNum);
+				printf("\t\t\t'getStoreVal''%d\n",getStoreVal($3));
 				storeNum++;
 			}
 
@@ -643,7 +640,10 @@ declaration
 				printf("%s","ERROR!!!");
 				}
 			}else{
-				
+				a.storeVal = storeNum;
+				update(a);
+				printf("\t\t\t'getStoreVal''%d\n",getStoreVal($3));
+				storeNum++;
 			}
 			printf("%s\n","Reducing to [declaration]");
 
@@ -695,14 +695,11 @@ declaration
 				printf("%s","ERROR!!!");
 				}
 			}else{
-				struct content a;
-				strcpy(a.id,$3);
-				strcpy(a.bigtype,"var");
-				a.ival = $5.uval.ival;
 				a.storeVal = storeNum;
 				update(a);
 				fprintf(javafile,"\t\tsipush %d\n",$5.uval.ival);
 				fprintf(javafile,"\t\tistore %d\n",storeNum);
+				printf("\t\t\t'getStoreVal''%d\n",getStoreVal($3));
 				storeNum++;
 			}
 			printf("%s\n","Reducing to [declaration]");
@@ -719,6 +716,10 @@ declaration
 			if(checkScope($3)==0)
 			{
 			fprintf(javafile,"\tfield static int %s \n", $3);
+			}else{
+			a.storeVal = storeNum;
+			update(a);
+			storeNum++;
 			}
 			printf("%s\n","Reducing to [declaration]");
 		}
@@ -851,10 +852,11 @@ operation_exp
 	| IDENTIFIER 
 		{
 			$$=getValue($1);
-			printf("Id : %s\nNow Scope : %d\nwhatScopeWeCreate: %d\ninNowscope: %d\nvalue:%d\n",$1,scope,getInitScope($1),getNowScope($1),$$);
+			printf("Id : %s\nNow Scope : %d\nwhatScopeWeCreate: %d\ninNowscope: %d\nvalue:%d\nstoreVal:%d\n",$1,scope,getInitScope($1),getNowScope($1),$$,getStoreVal($1));
 			if(getInitScope($1)!=scope){
 				if(checkScope($1)==0){								fprintf(javafile,"\t\tgetstatic %s test.%s\n",getType($1),$1);	
 				}else{
+				printf("????????%s and istore:%d\n",$1,getStoreVal($1));
 				fprintf(javafile,"\t\tiload %d\n",getStoreVal($1));
 				}
 			}else{
@@ -897,7 +899,7 @@ relational_exp
 		fprintf(javafile,"\t\tisub\n");
 		fprintf(javafile,"\t\tifgt L1\n");
 		fprintf(javafile,"\t\ticonst_0\n");
-		fprintf(javafile,"\t\tgoto L2");
+		fprintf(javafile,"\t\tgoto L2\n");
 		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
 		fprintf(javafile,"\tL2:\n");	
 		printf("%s\n","Reducing to [relational_expression]");
@@ -917,7 +919,19 @@ relational_exp
 		fprintf(javafile,"\tL2:\n");
 		printf("%s\n","Reducing to [relational_expression]");}
 	| operation_exp GE operation_exp
-		{printf("%s\n","Reducing to [relational_expression]");}
+		{
+		if($1 >= $3){
+			$$ = 1;
+		}else{
+			$$ = 0;
+		}
+		fprintf(javafile,"\t\tisub\n");
+		fprintf(javafile,"\t\tifge L1\n");
+		fprintf(javafile,"\t\ticonst_0\n");
+		fprintf(javafile,"\t\tgoto L2\n");
+		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
+		fprintf(javafile,"\tL2:\n");
+		printf("%s\n","Reducing to [relational_expression]");}
 	| operation_exp EQ operation_exp
 		{
 		if($1 == $3){
@@ -934,10 +948,32 @@ relational_exp
 		printf("%s\n","Reducing to [relational_expression]");
 		}
 	| operation_exp NE operation_exp
-		{printf("%s\n","Reducing to [relational_expression]");}
+		{
+		if($1 != $3){
+			$$ = 1;
+		}else{
+			$$ = 0;
+		}
+		fprintf(javafile,"\t\tisub\n");
+		fprintf(javafile,"\t\tifne L1\n");
+		fprintf(javafile,"\t\ticonst_0\n");
+		fprintf(javafile,"\t\tgoto L2\n");
+		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
+		fprintf(javafile,"\tL2:\n");
+		printf("%s\n","Reducing to [relational_expression]");}
 	| operation_exp AND operation_exp
+		{
+		if($1 && $3){
+			$$ = 1;
+		}else{
+			$$ = 0;
+		}
+		fprintf(javafile,"\t\tiand\n");
+		}
 	| operation_exp OR operation_exp
-		{printf("%s\n","Reducing to [relational_expression]");}
+		{
+		fprintf(javafile,"\t\tior\n");
+		printf("%s\n","Reducing to [relational_expression]");}
 	| TRUE
 		{
 			$$ = 1 ;//true
@@ -1010,6 +1046,7 @@ parameter_declaration
 			strcpy(a.bigtype,"func_parameter");
 			a.ival = 0;
 			insert(a);
+			//fprintf(javafile,"\t\t%s\n",$3);
 			strcpy(typekeeper[count],$3);
 			count++;
 			printf("%s\n","Reducing to [parameter_declaration]");
