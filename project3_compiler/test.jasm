@@ -1,0 +1,41 @@
+/*-------------------------------------------------*/
+/*              Java Assembly Code                 */
+/*-------------------------------------------------*/
+class test
+{
+	method public static void main(java.lang.String[])
+	max_stack 15
+	max_locals 15
+	{
+		sipush 10
+		sipush 0
+		istore 0
+		sipush 0
+		istore 1
+	L0:
+		iload 1
+		sipush 10
+		isub
+		ifle L1
+		iconst_0
+		goto L2
+	L1:
+		iconst_1
+	L2:
+		ifeq L3
+		iload 0
+		iload 1
+		iadd
+		istore 1
+		iload 1
+		sipush 1
+		iadd
+		istore 1
+		goto L0
+	L3:
+		getstatic java.io.PrintStream java.lang.System.out
+		iload 1
+		invokevirtual void java.io.PrintStream.print(int)
+		return
+	}
+}
