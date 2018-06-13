@@ -1059,8 +1059,10 @@ simple_statment
 		struct content a;	
 		strcpy(a.id,$1);
 		a.ival = $3;
+		printf("..id---(%s)...value(%d)...storeVal(%d)\n",$1,getValue($1),getStoreVal($1));
+		a.storeVal = getStoreVal($1);
 		update(a);
-		printf("..........%s...%d\n",$1,getValue($1));
+		printf("..id---(%s)...value(%d)...storeVal(%d)\n",$1,getValue($1),getStoreVal($1));
 		if(checkScope($1)==0){
 		fprintf(javafile,"\t\tputstatic %s test.%s\n",getType($1),$1);
 		}else{
