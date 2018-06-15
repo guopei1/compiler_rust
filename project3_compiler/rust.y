@@ -34,6 +34,8 @@ int tempNum = 0;
 bool isInvoke = false;
 int orderCount = 0;
 char orderToFile[256][256];
+int label = 0;
+
 
 int insert(struct content a){
 	bool inSymbolTable = false ;
@@ -83,8 +85,6 @@ int insert(struct content a){
 			}else{
 			symbolTable[scope][id_total].isGlobal = 1;
 			}
-			
-
 			id_total++;
 			}
 		}else if(strcmp("str",a.type)==0){
@@ -180,7 +180,6 @@ int update(struct content a){
 		}
 	}
 } 
-
 
 int checkScope(char *c){
 	for(int i = 0; i<= scope; i++)
@@ -359,7 +358,7 @@ int dump(){
 %nonassoc UMINUS
 %type<sdec> value_declaration
 %type<type> type_specifier 
-%type<m_nInt> operation_exp expression relational_exp func_inv_list 
+%type<m_nInt> operation_exp expression relational_exp func_inv_list
 
 
 %%
@@ -882,11 +881,12 @@ relational_exp
 			$$ = 0 ;
 		}
 		fprintf(javafile,"\t\tisub\n");
-		fprintf(javafile,"\t\tiflt L1\n");
+		fprintf(javafile,"\t\tiflt L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
-		fprintf(javafile,"\t\tgoto L2\n");
-		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
-		fprintf(javafile,"\tL2:\n");
+		fprintf(javafile,"\t\tgoto L%d\n",label+1);
+		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label+1);
+		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");
 		}
 	| operation_exp GT operation_exp
@@ -897,11 +897,12 @@ relational_exp
 			$$ = 0 ;
 		}
 		fprintf(javafile,"\t\tisub\n");
-		fprintf(javafile,"\t\tifgt L1\n");
+		fprintf(javafile,"\t\tifgt L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
-		fprintf(javafile,"\t\tgoto L2\n");
-		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
-		fprintf(javafile,"\tL2:\n");	
+		fprintf(javafile,"\t\tgoto L%d\n",label+1);
+		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label+1);	
+		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");
 		}
 	| operation_exp LE operation_exp
@@ -912,11 +913,12 @@ relational_exp
 			$$ = 0;
 		}
 		fprintf(javafile,"\t\tisub\n");
-		fprintf(javafile,"\t\tifle L1\n");
+		fprintf(javafile,"\t\tifle L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
-		fprintf(javafile,"\t\tgoto L2\n");
-		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
-		fprintf(javafile,"\tL2:\n");
+		fprintf(javafile,"\t\tgoto L%d\n",label+1);
+		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label+1);
+		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");}
 	| operation_exp GE operation_exp
 		{
@@ -926,25 +928,27 @@ relational_exp
 			$$ = 0;
 		}
 		fprintf(javafile,"\t\tisub\n");
-		fprintf(javafile,"\t\tifge L1\n");
+		fprintf(javafile,"\t\tifge L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
-		fprintf(javafile,"\t\tgoto L2\n");
-		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
-		fprintf(javafile,"\tL2:\n");
+		fprintf(javafile,"\t\tgoto L%d\n",label+1);
+		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label+1);
+		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");}
 	| operation_exp EQ operation_exp
 		{
 		if($1 == $3){
 			$$ = 1;
 		}else{
-		fprintf(javafile,"\t\tisub\n");
-		fprintf(javafile,"\t\tifeq L1\n");
-		fprintf(javafile,"\t\ticonst_0\n");
-		fprintf(javafile,"\t\tgoto L2\n");
-		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
-		fprintf(javafile,"\tL2:\n");
+			$$ = 0;
 		}
-			
+		fprintf(javafile,"\t\tisub\n");
+		fprintf(javafile,"\t\tifeq L%d\n",label);
+		fprintf(javafile,"\t\ticonst_0\n");
+		fprintf(javafile,"\t\tgoto L%d\n",label+1);
+		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label+1);
+		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");
 		}
 	| operation_exp NE operation_exp
@@ -955,11 +959,12 @@ relational_exp
 			$$ = 0;
 		}
 		fprintf(javafile,"\t\tisub\n");
-		fprintf(javafile,"\t\tifne L1\n");
+		fprintf(javafile,"\t\tifne L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
-		fprintf(javafile,"\t\tgoto L2\n");
-		fprintf(javafile,"\tL1:\n\t\ticonst_1\n");
-		fprintf(javafile,"\tL2:\n");
+		fprintf(javafile,"\t\tgoto L%d\n",label+1);
+		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label+1);
+		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");}
 	| operation_exp AND operation_exp
 		{
@@ -996,10 +1001,6 @@ expression
 		printf("%s\n","Reducing to [expression]");
 		}
 	| func_inv_list
-	| LP expression RP
-		{printf("%s\n","Reducing to [expression]");}
-	| '\"' expression '\"'
-		{printf("%s\n","Reducing to [expression]");}
 	;
 
 
@@ -1070,14 +1071,11 @@ simple_statment
 		}
 		printf("%s\n","Reducing to [simple_statment]");
 		}
-	| PRINT 
+	| PRINT	
 		{
 		fprintf(javafile,"\t\tgetstatic java.io.PrintStream java.lang.System.out\n");
-		printf("%s\n","Reducing to [simple_statment]");
 		}expression SEMICOLON{
-
 		fprintf(javafile,"\t\tinvokevirtual void java.io.PrintStream.print(int)\n");
-
 		}
 	| PRINTLN 
 		{
@@ -1100,34 +1098,37 @@ simple_statment
 selection_statement
 	: IF LP expression RP  
 		{
-		fprintf(javafile,"\t\tifeq L1\n");
+		fprintf(javafile,"\t\tifeq L%d\n",label);
+		label++;
 		printf("%s\n","Reducing to [selection_statment]");
-		}statement else_statement
+		}statement{
+		fprintf(javafile,"\t\tgoto L%d\n",label);
+		label--;
+		fprintf(javafile,"\tL%d:\n",label);
+		label++;
+		} else_statement
 	;
 else_statement
-	: ELSE 
+	: ELSE statement
 		{
-		fprintf(javafile,"\t\tgoto L3\n");
-		}
-		statement
-		{
-		fprintf(javafile,"\tL3:\n");
+		fprintf(javafile,"\tL%d:\n",label);
 		}
 	;
 
 iteration_statement
 	: WHILE 
 		{
-		fprintf(javafile,"\tL0:\n");
+		fprintf(javafile,"\tL%d:\n",label);
+		label++;
 		}
 		LP expression RP
 		{
-		fprintf(javafile,"\t\tifeq L3\n");
+		fprintf(javafile,"\t\tifeq L%d\n",label);
 		}
 		 statement
 		{
 		fprintf(javafile,"\t\tgoto L0\n");
-		fprintf(javafile,"\tL3:\n");
+		fprintf(javafile,"\tL%d:\n",label);
 		printf("%s\n","Reducing to [iteration_statment]");}
 	;
 
