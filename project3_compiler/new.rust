@@ -1,0 +1,19 @@
+fn main() {
+  // variables
+  let mut n = 6;
+  let mut sum = 0;
+  let mut index = 15;
+
+  while (index > 10) {
+    index = index - 1;
+    sum = 5;
+  }
+  println index;
+
+  if (sum == 5){
+    println sum;
+  }else{
+    println 2;
+  }
+    println n;
+}

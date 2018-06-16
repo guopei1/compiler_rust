@@ -884,7 +884,8 @@ relational_exp
 		fprintf(javafile,"\t\tiflt L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
 		fprintf(javafile,"\t\tgoto L%d\n",label+1);
-		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label);
+		fprintf(javafile,"\t\ticonst_1\n");
 		fprintf(javafile,"\tL%d:\n",label+1);
 		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");
@@ -900,7 +901,8 @@ relational_exp
 		fprintf(javafile,"\t\tifgt L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
 		fprintf(javafile,"\t\tgoto L%d\n",label+1);
-		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label);
+		fprintf(javafile,"\t\ticonst_1\n");
 		fprintf(javafile,"\tL%d:\n",label+1);	
 		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");
@@ -916,7 +918,8 @@ relational_exp
 		fprintf(javafile,"\t\tifle L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
 		fprintf(javafile,"\t\tgoto L%d\n",label+1);
-		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label);
+		fprintf(javafile,"\t\ticonst_1\n");
 		fprintf(javafile,"\tL%d:\n",label+1);
 		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");}
@@ -931,7 +934,8 @@ relational_exp
 		fprintf(javafile,"\t\tifge L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
 		fprintf(javafile,"\t\tgoto L%d\n",label+1);
-		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label);
+		fprintf(javafile,"\t\ticonst_1\n");
 		fprintf(javafile,"\tL%d:\n",label+1);
 		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");}
@@ -946,7 +950,8 @@ relational_exp
 		fprintf(javafile,"\t\tifeq L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
 		fprintf(javafile,"\t\tgoto L%d\n",label+1);
-		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label);
+		fprintf(javafile,"\t\ticonst_1\n");
 		fprintf(javafile,"\tL%d:\n",label+1);
 		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");
@@ -962,7 +967,8 @@ relational_exp
 		fprintf(javafile,"\t\tifne L%d\n",label);
 		fprintf(javafile,"\t\ticonst_0\n");
 		fprintf(javafile,"\t\tgoto L%d\n",label+1);
-		fprintf(javafile,"\tL%d:\n\t\ticonst_1\n",label);
+		fprintf(javafile,"\tL%d:\n",label);
+		fprintf(javafile,"\t\ticonst_1\n");
 		fprintf(javafile,"\tL%d:\n",label+1);
 		label+=2;
 		printf("%s\n","Reducing to [relational_expression]");}
@@ -1129,6 +1135,7 @@ iteration_statement
 		{
 		fprintf(javafile,"\t\tgoto L0\n");
 		fprintf(javafile,"\tL%d:\n",label);
+		label++;
 		printf("%s\n","Reducing to [iteration_statment]");}
 	;
 
