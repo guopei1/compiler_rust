@@ -35,7 +35,8 @@ bool isInvoke = false;
 int orderCount = 0;
 char orderToFile[256][256];
 int label = 0;
-
+int iflabel=0;
+int whilelabel=0;
 
 int insert(struct content a){
 	bool inSymbolTable = false ;
@@ -1088,7 +1089,7 @@ simple_statment
 		fprintf(javafile,"\t\tgetstatic java.io.PrintStream java.lang.System.out\n");
 		printf("%s\n","Reducing to [simple_statment]");
 		}expression SEMICOLON{
-		fprintf(javafile,"\t\tinvokevirtual void java.io.PrintStream.print(int)\n");
+		fprintf(javafile,"\t\tinvokevirtual void java.io.PrintStream.println(int)\n");
 		}
 	| RETURN SEMICOLON
 		{
@@ -1105,19 +1106,16 @@ selection_statement
 	: IF LP expression RP  
 		{
 		fprintf(javafile,"\t\tifeq L%d\n",label);
-		label++;
 		printf("%s\n","Reducing to [selection_statment]");
 		}statement{
-		fprintf(javafile,"\t\tgoto L%d\n",label);
-		label--;
+		fprintf(javafile,"\t\tgoto L%d\n",label+1);
 		fprintf(javafile,"\tL%d:\n",label);
-		label++;
 		} else_statement
 	;
 else_statement
 	: ELSE statement
 		{
-		fprintf(javafile,"\tL%d:\n",label);
+		fprintf(javafile,"\tL%d:\n",label+1);
 		}
 	;
 
