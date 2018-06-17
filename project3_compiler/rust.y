@@ -35,7 +35,8 @@ bool isInvoke = false;
 int orderCount = 0;
 char orderToFile[256][256];
 int label = 0;
-int iflabel=0;
+int iflabel1=0;
+int iflabel2=0;
 int whilelabel=0;
 
 int insert(struct content a){
@@ -1106,16 +1107,18 @@ selection_statement
 	: IF LP expression RP  
 		{
 		fprintf(javafile,"\t\tifeq L%d\n",label);
+		iflabel1=label;
 		printf("%s\n","Reducing to [selection_statment]");
 		}statement{
 		fprintf(javafile,"\t\tgoto L%d\n",label+1);
-		fprintf(javafile,"\tL%d:\n",label);
+		iflabel2=label+1;
+		fprintf(javafile,"\tL%d:\n",iflabel1);
 		} else_statement
 	;
 else_statement
 	: ELSE statement
 		{
-		fprintf(javafile,"\tL%d:\n",label+1);
+		fprintf(javafile,"\tL%d:\n",iflabel2);
 		}
 	;
 
@@ -1128,12 +1131,13 @@ iteration_statement
 		LP expression RP
 		{
 		fprintf(javafile,"\t\tifeq L%d\n",label);
+		whilelabel=label;
+		label++;
 		}
 		 statement
 		{
 		fprintf(javafile,"\t\tgoto L0\n");
-		fprintf(javafile,"\tL%d:\n",label);
-		label++;
+		fprintf(javafile,"\tL%d:\n",whilelabel);
 		printf("%s\n","Reducing to [iteration_statment]");}
 	;
 
