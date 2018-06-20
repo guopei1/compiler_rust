@@ -3,39 +3,63 @@
 /*-------------------------------------------------*/
 class test
 {
+	field static int c 
+	field static int a = 15 
+	method public static int add(int,int)
+	max_stack 15
+	max_locals 15
+	{
+		iload 0
+		iload 1
+		getstatic int test.a
+		iadd
+		ireturn
+	}
 	method public static void main(java.lang.String[])
 	max_stack 15
 	max_locals 15
 	{
+		getstatic int test.a
 		sipush 10
-		sipush 0
-		istore 0
-		sipush 0
-		istore 1
-	L0:
-		iload 1
+		invokestatic int test.add(int,int)
+		putstatic int test.c
+		getstatic int test.c
 		sipush 10
 		isub
-		ifle L1
+		ifgt L0
 		iconst_0
-		goto L2
-	L1:
+		goto L1
+	L0:
 		iconst_1
+	L1:
+		ifeq L2
+		getstatic int test.c
+		sipush 10
+		iadd
+		putstatic int test.c
+		goto L3
 	L2:
-		ifeq L3
-		iload 0
-		iload 1
-		iadd
-		istore 1
-		iload 1
-		sipush 1
-		iadd
-		istore 1
-		goto L0
+		getstatic int test.c
+		sipush 10
+		isub
+		putstatic int test.c
 	L3:
-		getstatic java.io.PrintStream java.lang.System.out
-		iload 1
-		invokevirtual void java.io.PrintStream.print(int)
-		return
-	}
+		getstatic int test.c
+		sipush 2
+		irem
+		sipush 1
+		isub
+		ifeq L2
+		iconst_0
+		goto L3
+	L2:
+		iconst_1
+	L3:
+		ifeq L4
+		getstatic int test.c
+		sipush 100
+		iadd
+		putstatic int test.c
+		goto L5
+	L4:
 }

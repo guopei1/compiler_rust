@@ -643,6 +643,8 @@ declaration
 			}else{
 				a.storeVal = storeNum;
 				update(a);
+				fprintf(javafile,"\t\tsipush 0\n");
+				fprintf(javafile,"\t\tistore %d\n",storeNum);
 				printf("\t\t\t'getStoreVal''%d\n",getStoreVal($3));
 				storeNum++;
 			}
